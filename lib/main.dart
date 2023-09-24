@@ -9,29 +9,63 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(primarySwatch: Colors.green),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Flutter Demo'),
+          title: Text('To-Do List App'),
+          backgroundColor: Colors.blueGrey[900],
+          titleTextStyle: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w900,
+            fontFamily: 'Cinzel',
+            letterSpacing: 3,
+          ),
+          centerTitle: true,
+          elevation: 2,
         ),
-        body: Center(
-          child: Text(
-            'Hello World lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            textAlign: TextAlign.left,
-            maxLines: 2,
-            style: TextStyle(
-              backgroundColor: Colors.red,
-              color: Colors.white,
-              fontFamily: 'Cinzel',
-              fontSize: 29,
-              fontWeight: FontWeight.bold,
-              decoration: TextDecoration.underline,
-              decorationColor: Colors.blueAccent ,
-            ),
+        body: TaskList(),
+      ),
+    );
+  }
+}
+
+class TaskList extends StatefulWidget {
+  @override
+  _TaskListState createState() => _TaskListState();
+}
+
+class _TaskListState extends State<TaskList> {
+  List<String> tasks = [];
+  TextEditingController _taskController =
+      TextEditingController(); // Add a TextEditingController
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        TextField(
+          controller: _taskController, // Assign the controller to the TextField
+
+          onSubmitted: (newTask) {
+            setState(() {
+              tasks.add(newTask);
+              _taskController.clear(); // Clear the text field
+            });
+          },
+          decoration: InputDecoration(
+            hintText: 'Enter a task',
           ),
         ),
-      ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: tasks.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(tasks[index]),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }
