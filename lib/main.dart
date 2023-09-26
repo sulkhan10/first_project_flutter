@@ -12,15 +12,6 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: Text('To-Do List App'),
-          backgroundColor: Colors.blueGrey[900],
-          titleTextStyle: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w900,
-            fontFamily: 'Cinzel',
-            letterSpacing: 3,
-          ),
-          centerTitle: true,
-          elevation: 2,
         ),
         body: TaskList(),
       ),
@@ -35,24 +26,31 @@ class TaskList extends StatefulWidget {
 
 class _TaskListState extends State<TaskList> {
   List<String> tasks = [];
-  TextEditingController _taskController =
-      TextEditingController(); // Add a TextEditingController
+  TextEditingController _taskController = TextEditingController();
+  int editingIndex = -1; // To track the task being edited
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         TextField(
-          controller: _taskController, // Assign the controller to the TextField
-
+          controller: _taskController,
           onSubmitted: (newTask) {
-            setState(() {
-              tasks.add(newTask);
-              _taskController.clear(); // Clear the text field
-            });
+            if (editingIndex == -1) {
+              setState(() {
+                tasks.add(newTask);
+                _taskController.clear();
+              });
+            } else {
+              setState(() {
+                tasks[editingIndex] = newTask;
+                _taskController.clear();
+                editingIndex = -1;
+              });
+            }
           },
           decoration: InputDecoration(
-            hintText: 'Enter a task',
+            hintText: 'Enter a to-do task',
           ),
         ),
         Expanded(
@@ -61,11 +59,41 @@ class _TaskListState extends State<TaskList> {
             itemBuilder: (context, index) {
               return ListTile(
                 title: Text(tasks[index]),
+              subtitle: Text('This is a task'),
+              leading: CircleAvatar(),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        setState(() {
+                          _taskController.text = tasks[index];Í
+                          editingIndex = index;
+                        });
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () {
+                        setState(() {
+                          tasks.removeAt(index);
+                        });
+                      },
+                    ),
+                  ],
+                ),
               );
             },
           ),
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    _taskController.dispose();
+    super.dispose();
   }
 }
