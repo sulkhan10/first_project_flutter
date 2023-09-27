@@ -50,7 +50,7 @@ class _TaskListState extends State<TaskList> {
             }
           },
           decoration: InputDecoration(
-            hintText: 'Enter a to-do task',
+            hintText: 'Enter a to-do task to list',
           ),
         ),
         Expanded(
