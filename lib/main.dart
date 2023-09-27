@@ -68,7 +68,7 @@ class _TaskListState extends State<TaskList> {
                       icon: Icon(Icons.edit),
                       onPressed: () {
                         setState(() {
-                          _taskController.text = tasks[index];Í
+                          _taskController.text = tasks[index];
                           editingIndex = index;
                         });
                       },
